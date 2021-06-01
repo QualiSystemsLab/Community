@@ -1,0 +1,62 @@
+spec_version: 1
+kind: TerraForm
+
+inputs:
+  - LOCATION:
+  - RESOURCE_GROUP_NAME:
+  - SERVER_NAME:
+  - SERVER_USERNAME:
+  - SERVER_PASSWORD:
+  - DB_NAME:
+  - DB_USERNAME:
+  - DB_PASSWORD:
+  - DB_SIZE:
+  - DB_STORAGE:
+  - ALLOWED_IPS:
+  - COLLATION:
+  - APP_ID:
+  - APP_OWNER:
+  - APP_NAME:
+  - RO_PASSWORD:
+  - WO_PASSWORD:
+  - RW_PASSWORD:
+
+
+module:
+  #Update to AMD Git (include Branch)
+  source: git::https://github.com/QualiSystemsLab/Community.git//terraform/azure-paas-mssqldb
+
+terraform_version: 0.15.3
+
+variables:
+  values:
+    - LOCATION: $LOCATION
+    - RESOURCE_GROUP_NAME: $RESOURCE_GROUP_NAME
+    - SERVER_NAME: $SERVER_NAME
+    - SERVER_USERNAME: $SERVER_USERNAME
+    - SERVER_PASSWORD: $SERVER_PASSWORD
+    - DB_NAME: $DB_NAME
+    - DB_USERNAME: $DB_USERNAME
+    - DB_PASSWORD: $DB_PASSWORD
+    - DB_SIZE: $DB_SIZE
+    - DB_STORAGE: $DB_STORAGE
+    - ALLOWED_IPS: $ALLOWED_IPS
+    - COLLATION: $COLLATION
+    - APP_ID: $APP_ID
+    - APP_OWNER: $APP_OWNER
+    - APP_NAME: $APP_NAME
+    - RO_PASSWORD: $RO_PASSWORD
+    - WO_PASSWORD: $WO_PASSWORD
+    - RW_PASSWORD: $RW_PASSWORD
+
+outputs:
+  - DB_HOSTNAME
+  - DB_USER
+  - DB_NAME
+  - RO_PASSWORD
+  - RW_PASSWORD
+  - WO_PASSWORD
+
+permissions:
+  azure: #Update to AMD managed identity
+    managed_identity_id: "colony-alexaz-demos/alex-demo-identity"

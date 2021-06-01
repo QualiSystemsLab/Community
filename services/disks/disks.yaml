@@ -1,0 +1,37 @@
+spec_version: 1
+kind: TerraForm
+
+inputs:
+  - LOCATION:
+  - SANDBOX_ID:
+  - SYSTEM_STORAGE:
+  - TEMP_STORAGE:
+  - DATA_STORAGE:
+  - LOG_STORAGE:
+  - VM_NAME:
+  - MANAGED_IDENTITY:
+
+module:
+  source: git::https://github.com/QualiSystemsLab/Community.git//terraform/attach-disk
+
+terraform_version: 0.14.6
+
+variables:
+  values:
+    - SANDBOX_ID: $SANDBOX_ID
+    - LOCATION: $LOCATION
+    - DATA_STORAGE: $DATA_STORAGE
+    - LOG_STORAGE: $LOG_STORAGE
+    - TEMP_STORAGE: $TEMP_STORAGE
+    - SYSTEM_STORAGE: $SYSTEM_STORAGE
+    - VM_NAME: $VM_NAME
+
+
+outputs:       
+  - res_group_sandbox_id
+  - disk_id
+  - vm_id
+
+permissions:
+  azure:
+    managed_identity_id: $MANAGED_IDENTITY

@@ -1,0 +1,39 @@
+spec_version: 1
+kind: TerraForm
+
+# This service provisions a managed Azure SQL Database service in azure.
+# The service expects to get a bacpac file as an artifact.
+# If both ARTIFACTS_STORAGE_ACCOUNT and ARTIFACT_PATH inputs are not empty the service will import the artifact to the SQL Database.
+# The output of the service is the DB hostname (server name), database name, user and password. This information should be sufficient for any application using this database to generate a connection string.
+
+inputs:
+  - SANDBOX_ID:
+  - DB_NAME:
+  - ARTIFACTS_STORAGE_ACCOUNT:
+  - ARTIFACT_PATH:
+  - SQL_PACKAGE: "sqlutilitypkg/sqlpackage-linux-x64-en-US-15.0.4769.1.zip"
+
+
+module:
+  source: git::https://github.com/QualiSystemsLab/Community.git//terraform/azure-sql-database?ref=master
+
+terraform_version: 0.12.24
+
+variables:
+  values:
+    - SANDBOX_ID: $SANDBOX_ID
+    - DB_USERNAME: adminuser
+    - DB_NAME: $DB_NAME
+    - ARTIFACTS_SA: $ARTIFACTS_STORAGE_ACCOUNT
+    - ARTIFACT_PATH: $ARTIFACT_PATH
+    - SQL_PACKAGE: $SQL_PACKAGE
+
+outputs:
+  - DB_HOSTNAME
+  - DB_NAME
+  - DB_USER
+  - DB_PASSWORD
+
+permissions:
+  azure:
+    managed_identity_id: "dvue-qualicolony-rg/dvue-qualicolony-identity"

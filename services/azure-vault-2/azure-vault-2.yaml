@@ -1,0 +1,26 @@
+spec_version: 1
+kind: TerraForm
+
+inputs:
+  - KEYVAULT_NAME:
+  - KEYVAULT_RG:
+  - SECRET_NAME:
+  - MANAGED_IDENTITY:
+
+module:
+  source: git::https://github.com/QualiSystemsLab/Community.git//terraform/azure-vault?ref=master
+
+terraform_version: 0.12.24
+
+variables:
+  values:
+    - KEYVAULT_NAME: $KEYVAULT_NAME
+    - KEYVAULT_RG: $KEYVAULT_RG
+    - SECRET_NAME: $SECRET_NAME
+
+outputs:
+  - SECRET_VALUE
+
+permissions:
+  azure:
+    managed_identity_id: $MANAGED_IDENTITY

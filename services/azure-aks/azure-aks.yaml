@@ -1,0 +1,39 @@
+spec_version: 1
+kind: TerraForm
+inputs:
+  - LOCATION
+  - RESOURCE_GROUP_NAME
+  - SKU_TIER
+  - DNS_PREFIX
+  - NODE_POOL_NAME
+  - NODE_SIZE
+  - CLUSTER_NAME
+  - NODE_COUNT
+  - VNET_ADDRESS_SPACE
+  - SUBNET_LIST
+  - SUBNET_ID
+  - newVnet
+
+module:
+  source: git::https://github.com/QualiSystemsLab/Community/terraform/
+  # The source element is the location of your Terraform module,
+  # Both public and private repos are supported
+
+terraform_version: 0.14.6
+variables:
+  values:
+    - LOCATION: $LOCATION
+    - RESOURCE_GROUP_NAME: $RESOURCE_GROUP_NAME
+    - SKU_TIER: $SKU_TIER
+    - DNS_PREFIX: $DNS_PREFIX
+    - NODE_POOL_NAME: $NODE_POOL_NAME
+    - NODE_SIZE: $NODE_SIZE
+    - CLUSTER_NAME: $CLUSTER_NAME
+    - NODE_COUNT: $NODE_COUNT
+    - newVnet: $newVnet
+    - SUBNET_ID: $SUBNET_ID
+    - SUBNET_LIST: $SUBNET_LIST
+
+permissions:
+  azure:
+    managed_identity_id: "colony-alexaz-demos/alex-demo-identity"

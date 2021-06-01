@@ -1,0 +1,80 @@
+kind: blueprint
+spec_version: 1
+
+clouds:
+- azure 4: eastus
+
+metadata:
+    description: An Azure SQL Server deployment to be completed by request. This provisions a new resource group containing the server and database specified. 
+
+inputs:
+  - SERVER_NAME:
+      description: Name of DB Server to be created, will have sandbox ID appended
+  - DB_NAME:
+  - DB_USERNAME:
+      description: Username to add login credentials to the created database
+  - DB_PASSWORD:
+      display_style: masked
+  - WO_PASSWORD:
+      display_style: masked
+      description: Password for Write-Only account on database
+  - RW_PASSWORD:
+      display_style: masked
+      description: Password for Read-Write account on database
+  - RO_PASSWORD:
+      display_style: masked
+      description: Password for Read-Only account on database
+  - DB_SIZE:
+      default_value: small
+      description: "small (2 vCore), medium (4 vCore), or large (8 vCore). S3 for 100 DTU"
+  - DB_STORAGE:
+      default_value: 50
+      description: "Amount of storage attached to the database."      
+  - ALLOWED_IPS:
+      description: "Comma delimited list of IPs (ex: 192.168.1.1,192.168.1.2) to allow access from."
+      optional: true
+  - APP_ID:
+  - APP_OWNER:
+  - APP_NAME:
+  - COLLATION:
+     default_value: SQL_LATIN1_GENERAL_CP1_CI_AS
+
+applications:
+- VM-Redirect: 
+    input_values:
+       - WEBAPP_ENDPOINT: "www.google.com"
+    
+services:
+  - azure-vault:
+      input_values:
+        - KEYVAULT_NAME: "colony_vault"
+        - KEYVAULT_RG: "colony_vault"
+        - SECRET_NAME: "mssql-password"
+        - MANAGED_IDENTITY: "colony-alexaz-demos/alex-demo-identity"
+  - azure-paas-mssql:
+      depends_on:
+        - azure-vault
+      input_values:
+        - LOCATION: eastus
+        - RESOURCE_GROUP_NAME: $colony.environment.id
+        - SERVER_NAME: $SERVER_NAME
+        - SERVER_USERNAME: azdbadmin
+        - SERVER_PASSWORD: $outputs.azure-vault.SECRET_VALUE
+        - DB_NAME: $DB_NAME
+        - DB_USERNAME: $DB_USERNAME
+        - DB_PASSWORD: $DB_PASSWORD
+        - DB_SIZE: $DB_SIZE
+        - DB_STORAGE: $DB_STORAGE
+        - ALLOWED_IPS: $ALLOWED_IPS
+        - COLLATION: $COLLATION
+        - APP_ID: $APP_ID
+        - APP_OWNER: $APP_OWNER
+        - APP_NAME: $APP_NAME
+        - WO_PASSWORD: $WO_PASSWORD
+        - RW_PASSWORD: $RW_PASSWORD
+        - RO_PASSWORD: $RO_PASSWORD
+
+ingress:
+    enabled: false
+
+

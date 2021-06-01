@@ -1,0 +1,23 @@
+spec_version: 1
+kind: TerraForm
+inputs:
+  - LOCATION
+  - DATALAKE_NAME
+  - RESOURCE_GROUP_NAME
+
+module:
+  source: git::https://github.com/QualiSystemsLab/Community.git//terraform/azure-datalake
+
+terraform_version: 0.14.6
+variables:
+  values:
+    - LOCATION: $LOCATION
+    - DATALAKE_NAME: $DATALAKE_NAME
+    - RESOURCE_GROUP_NAME: $RESOURCE_GROUP_NAME
+outputs:        
+  - DATALAKE_ENDPOINT
+  - DATALAKE_NAME
+
+permissions:
+  azure:
+    managed_identity_id: "colony-alexaz-demos/alex-demo-identity"

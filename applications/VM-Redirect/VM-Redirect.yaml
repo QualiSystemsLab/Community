@@ -1,0 +1,34 @@
+spec_version: 1
+kind: application
+
+# This VM will auto power off 5 minutes after deployment.
+
+inputs:
+  - WEBAPP_ENDPOINT: none
+
+source:
+  os_type: linux
+  image:
+    azure_image:
+      - urn: Canonical:UbuntuServer:16.04-LTS:latest
+        username: adminuser
+
+infrastructure:
+  connectivity:
+    external:
+      - port_info:
+          port: 80
+  compute:
+    spec:
+      azure:
+        vm_size: Standard_D2a_v4
+
+configuration:  
+  initialization:
+    script: init.sh
+  healthcheck:
+    wait_for_ports: ALL
+    timeout: 180
+
+debugging:
+  connection_protocol: SSH

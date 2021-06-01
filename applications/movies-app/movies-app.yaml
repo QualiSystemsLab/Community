@@ -1,0 +1,43 @@
+kind: application
+spec_version: 1
+inputs:
+- AZURE_VM_SIZE: Basic_A1
+- INSTANCETYPE: t3.small,t3.medium,c5.large,m5.large,m4.large
+- ASPNETCORE_URLS: http://*:5000
+- ASPNETCORE_ENVIRONMENT: Production
+- ConnectionStrings__MvcMovieContext: ''
+configuration:
+  healthcheck:
+    script: healthcheck.sh
+    timeout: 1000
+  initialization:
+    script: init.sh
+  start:
+    script: start.sh
+source:
+  image:
+    docker_image:
+    - name: ubuntu
+      tag: 16.04
+    ami:
+    - id: ami-00b36349b3dba2ec3
+      region: eu-west-1
+      username: ubuntu
+    azure_image:
+    - urn: Canonical:UbuntuServer:16.04-LTS:latest
+      username: adminuser
+  os_type: linux
+infrastructure:
+  compute:
+    spec:
+      aws:
+        instance_type: $INSTANCETYPE
+      azure:
+        vm_size: $AZURE_VM_SIZE
+  connectivity:
+    external:
+    - port_info:
+        port: 5000
+        path: ''
+debugging:
+  connection_protocol: SSH
