@@ -1,0 +1,44 @@
+spec_version: 1
+kind: blueprint
+
+metadata:
+  description: MSSQL Server on Windows 2019 Datacenter Server in Azure
+
+clouds:
+  - azure 4: eastus
+
+inputs:
+  - DataStorage: 
+      default_value: 128
+      description: Size of Data (M) Drive in GB
+  - LogStorage: 
+      default_value: 128
+      description: Size of Log (L) Drive in GB
+  - SystemStorage: 
+      default_value: 128
+      description: Size of System (J) Drive in GB
+  - TempStorage: 
+      default_value: 128
+      description: Size of Temp (T) Drive in GB
+
+applications:
+  - VM-Redirect:
+
+services:
+  - disks:
+      input_values:
+        - LOCATION: eastus
+        - SANDBOX_ID: $colony.environment.id
+        - SYSTEM_STORAGE: $SystemStorage
+        - TEMP_STORAGE: $TempStorage
+        - DATA_STORAGE: $DataStorage
+        - LOG_STORAGE: $LogStorage
+        - VM_NAME: "VM-Redirect"
+        - MANAGED_IDENTITY: "colony-alexaz-demos/alex-demo-identity"
+
+
+debugging:
+  availability: enabled-on
+
+ingress:
+    enabled: false

@@ -1,0 +1,36 @@
+spec_version: 1
+kind: TerraForm
+inputs:
+  - REGION: eu-west-1
+  # - DB_NAME
+  - DB_USER
+  - DB_PASS
+  - SANDBOX_ID
+  - ROLE_ARN: PowerUserAccess
+
+module:
+  source: github.com/QualiSystemsLab/terraform/aws-rds-sql-db
+  # The source element is the location of your Terraform module,
+  # Both public and private repos are supported
+
+terraform_version: 0.13
+variables:
+  var_file: terraform.tfvars
+  values:
+    - aws_region: $REGION
+    # - db_name: $DB_NAME
+    - username: $DB_USER
+    - password: $DB_PASS
+    - sandbox_id: $SANDBOX_ID
+    - engine: sqlserver-ex
+    - engine_version: 14.00.3049.1.v1
+    - instance_class: db.t2.medium
+
+permissions:  
+  aws:
+    role_arn: $ROLE_ARN     #role assumed by service
+    external_id: 'colony'
+    
+outputs:        # Declaring the outputs from Terraform that will be used as an input to the application consuming this service
+  # The SQL server endpoint will be used as an input to the application consuming this service
+  - rds_sql_address

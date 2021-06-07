@@ -1,0 +1,33 @@
+spec_version: 1
+kind: TerraForm
+
+inputs:
+  - LOCATION:
+  - STORAGE_ACCOUNT_NAME:
+  - RESOURCE_GROUP_NAME:
+  - ACCOUNT_TIER: "standard"
+  - ACCOUNT_REPLICATION: "LRS"
+  - CONTAINER_NAME:
+
+
+module:
+  source: git::https://github.com/QualiSystemsLab/Community.git//terraform/azure-storage
+
+terraform_version: 0.14.6
+
+variables:
+  values:
+    - LOCATION: $LOCATION
+    - STORAGE_ACCOUNT_NAME: $STORAGE_ACCOUNT_NAME
+    - RESOURCE_GROUP_NAME: $RESOURCE_GROUP_NAME
+    - ACCOUNT_TIER: "standard"
+    - ACCOUNT_REPLICATION: "LRS"
+    - CONTAINER_NAME: $CONTAINER_NAME
+
+outputs:       
+  - STORAGE_ACCOUNT_NAME
+  - STORAGE_ACCOUNT_ENDPOINT
+
+permissions:
+  azure:
+    managed_identity_id: "colony_identity/colony_identity"

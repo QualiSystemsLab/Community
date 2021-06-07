@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd $ARTIFACTS_PATH/dist;
+DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1 ./MvcMovie;

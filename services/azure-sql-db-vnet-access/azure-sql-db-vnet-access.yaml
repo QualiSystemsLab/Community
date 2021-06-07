@@ -1,0 +1,44 @@
+spec_version: 1
+kind: TerraForm
+inputs:
+  - LOCATION: 'West Europe'
+  - DB_NAME
+  - DB_USER
+  - DB_PASS
+  - SANDBOX_ID
+  - CLIENT_ID
+  - CLIENT_SECRET
+  - SUBSCRIPTION_ID
+  - TENANT_ID
+  - SUBNET_NAME
+  - SUBNET_VNET
+  - SUBNET_RESOURCE_GROUP
+
+module:
+  source: github.com/QualiSystemsLab/terraform/azure-sql-db-vnet-access
+  # The source element is the location of your Terraform module,
+  # Both public and private repos are supported
+
+terraform_version: 0.13
+variables:
+  var_file: terraform.tfvars
+  values:
+    - location: $LOCATION
+    - db_name: $DB_NAME
+    - username: $DB_USER
+    - password: $DB_PASS
+    - sandbox_id: $SANDBOX_ID
+    - client_id: $CLIENT_ID
+    - client_secret: $CLIENT_SECRET
+    - subscription_id: $SUBSCRIPTION_ID
+    - tenant_id: $TENANT_ID
+    - subnet_name: $SUBNET_NAME
+    - subnet_vnet: $SUBNET_VNET
+    - subnet_resource_group: $SUBNET_RESOURCE_GROUP
+outputs:        # Declaring the outputs from Terraform that will be used as an input to the application consuming this service
+  # The SQL server name will be used as an input to the application consuming this service
+  - server_name
+  # The SQL database name to be used as an input to the application consuming this service
+  - database_name
+  # The server admin login username to be used as an input to the application consuming this service
+  - server_admin_login_name

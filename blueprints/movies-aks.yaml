@@ -1,0 +1,52 @@
+kind: blueprint
+spec_version: 1
+
+clouds:
+- azure 2/aks-cluster
+
+inputs:
+  - VM_SIZE:
+      default_value: Basic_A1
+      optional: true
+  - DB_USER: colony  # Used to define the db admin account
+  # Used to define the db admin password
+  - DB_PASS:
+      display_style: masked
+      description: >
+        Database server password must contain from 8 to 128 characters.
+        Your password must contain characters from three of the following categories:
+        English uppercase letters, English lowercase letters, numbers (0-9),
+        and non-alphanumeric characters (!, $, #, %, and so on)
+      default_value: sv4YPTPs7fN&
+  - DB_NAME: demo_db  # DB_NAME - a target database name
+
+applications:
+- movies-app:
+    input_values:
+    - AZURE_VM_SIZE: $VM_SIZE
+    - ConnectionStrings__MvcMovieContext: "Server=tcp:${outputs.azure-sql-db-vnet-access.server_name};Database=${outputs.azure-sql-db-vnet-access.database_name};User ID=${outputs.azure-sql-db-vnet-access.server_admin_login_name};Password=${DB_PASS};Trusted_Connection=False;Encrypt=True;MultipleActiveResultSets=True;"
+    # The website depends on SQL Server and will start deploying only when the database is ready
+    depends_on:
+    - azure-sql-db-vnet-access
+
+services:
+  - azure-sql-db-vnet-access:
+      input_values:
+        - LOCATION: 'West Europe' # we want the DB in the same location as our AKS cluster
+        - DB_NAME: $DB_NAME
+        - DB_USER: $DB_USER
+        - DB_PASS: $DB_PASS
+        - SANDBOX_ID: $COLONY.SandboxId
+        - CLIENT_ID: c0403f4a-6b71-46e6-8565-def7a5eb2465
+        - CLIENT_SECRET: 49062e71-c162-4ff1-abdf-e3d96dfd5c64
+        - SUBSCRIPTION_ID: 4e556c5a-6bc6-4724-ac8a-ac2c14906549
+        - TENANT_ID: c55d955e-1ea6-4462-987a-ad33142ddffe
+        - SUBNET_NAME: aks-subnet # please set the name of the Subnet, ensure that Mycrosoft.SQL is available to access to this subnet
+        - SUBNET_VNET: aks-vnet-27360603 # please set the name of the Virtual Network this Subnet is located
+        - SUBNET_RESOURCE_GROUP: MC_colony-zdflntzjndlh32489_alex-aks-cluster_westeurope # please set the name of the resource group the Virtual Network is located in
+
+artifacts:
+- movies-app: artifacts/movies-app/latest/MoviesApp.tar.gz
+
+debugging:
+  availability: on

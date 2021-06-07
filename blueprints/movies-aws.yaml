@@ -1,0 +1,44 @@
+kind: blueprint
+spec_version: 1
+
+clouds:
+- AWS 1: eu-west-1
+
+inputs:
+  - INSTANCE_TYPE:
+      default_value: t3.medium
+  - DB_USER: colony  # Used to define the db admin account
+  # Used to define the db admin password
+  - DB_PASS:
+      display_style: masked
+      description: >
+        Database server password must contain from 8 to 128 characters.
+        Your password must contain characters from three of the following categories:
+        English uppercase letters, English lowercase letters, numbers (0-9),
+        and non-alphanumeric characters (!, $, #, %, and so on)
+      default_value: sv4YPTPs7fN&
+#   - DB_NAME: demo_db  # DB_NAME - a target database name
+
+applications:
+- movies-app:
+    input_values:
+    - INSTANCETYPE: $INSTANCE_TYPE
+    - ConnectionStrings__MvcMovieContext: "Server=${outputs.aws-rds-sql-db.rds_sql_address};Database=sqlexpress;User ID=${DB_USER};Password=${DB_PASS};Trusted_Connection=False;MultipleActiveResultSets=True;"    
+    # The website depends on SQL Server and will start deploying only when the database is ready
+    depends_on: 
+    - aws-rds-sql-db
+
+services:
+- aws-rds-sql-db:
+      input_values:
+        - REGION: eu-west-1
+        # - DB_NAME: $DB_NAME
+        - DB_USER: $DB_USER
+        - DB_PASS: $DB_PASS
+        - SANDBOX_ID: $COLONY.SandboxId
+
+artifacts:
+- movies-app: artifacts/movies-app/latest/MoviesApp.tar.gz
+
+debugging:
+  availability: on

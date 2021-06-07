@@ -1,0 +1,31 @@
+spec_version: 1
+kind: TerraForm
+inputs:
+  - LOCATION
+  - RESOURCE_GROUP_NAME
+  - VNET_NAME
+  - VNET_ADDRESS_SPACE
+  - SUBNET_LIST
+  - TARGET_SUBNET
+
+
+module:
+  source: git::https://github.com/QualiSystemsLab/Community.git//terraform/azure-vnet
+
+terraform_version: 0.14.6
+variables:
+  values:
+    - LOCATION: $LOCATION
+    - RESOURCE_GROUP_NAME: $RESOURCE_GROUP_NAME
+    - VNET_NAME: $VNET_NAME
+    - VNET_ADDRESS_SPACE: $VNET_ADDRESS_SPACE
+    - SUBNET_LIST: $SUBNET_LIST
+    - TARGET_SUBNET: $TARGET_SUBNET
+
+outputs:        # Declaring the outputs from Terraform that will be used as an input to the application consuming this service
+  - STORAGE_ACCOUNT_NAME
+  - STORE_ACCOUNT_ENDPOINT
+
+permissions:
+  azure:
+    managed_identity_id: "colony_identity/colony_identity"
