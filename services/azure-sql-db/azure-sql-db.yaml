@@ -36,4 +36,4 @@ outputs:
 
 permissions:
   azure:
-    managed_identity_id: "dvue-qualicolony-rg/dvue-qualicolony-identity"
+    managed_identity_id: "colony_identity/colony_identity"

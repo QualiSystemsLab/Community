@@ -30,4 +30,4 @@ outputs:
 
 permissions:
   azure:
-    managed_identity_id: "colony-alexaz-demos/alex-demo-identity"
+    managed_identity_id: "colony_identity/colony_identity"

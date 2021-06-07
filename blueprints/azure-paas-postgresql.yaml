@@ -29,9 +29,6 @@ inputs:
   - ALLOWED_IPS:
       optional: true
       description: "Comma delimited list of IPs (ex: 192.168.1.1,192.168.1.2)"
-  - APP_ID:
-  - APP_OWNER:
-  - APP_NAME:
 
 applications:
 - VM-Redirect:
@@ -44,7 +41,7 @@ services:
         - KEYVAULT_NAME: "colony_vault"
         - KEYVAULT_RG: "colony_vault"
         - SECRET_NAME: "postgres-password"
-        - MANAGED_IDENTITY: "colony-alexaz-demos/alex-demo-identity"
+        - MANAGED_IDENTITY: "colony_identity/colony_identity"
   - azure-paas-postgresql:
       depends_on:
         - azure-vault

@@ -50,7 +50,7 @@ services:
         - KEYVAULT_NAME: "colony_vault"
         - KEYVAULT_RG: "colony_vault"
         - SECRET_NAME: "mssql-password"
-        - MANAGED_IDENTITY: "colony-alexaz-demos/alex-demo-identity"
+        - MANAGED_IDENTITY: "colony_identity/colony_identity"
   - azure-paas-mssql:
       depends_on:
         - azure-vault

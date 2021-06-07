@@ -28,4 +28,4 @@ outputs:        # Declaring the outputs from Terraform that will be used as an i
 
 permissions:
   azure:
-    managed_identity_id: "colony-alexaz-demos/alex-demo-identity"
+    managed_identity_id: "colony_identity/colony_identity"
