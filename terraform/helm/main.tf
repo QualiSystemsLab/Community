@@ -53,14 +53,14 @@ data "kubernetes_service" "helm_deploy" {
   }
 }
 
-resource "time_sleep" "wait_30_seconds" {
+resource "time_sleep" "wait_in_seconds" {
   depends_on = [helm_release.helm_deploy]
 
-  create_duration = "80s"
+  create_duration = var.WAIT_TIME
 }
 
 data "kubernetes_ingress" "helm_ingress" {
-  depends_on = [time_sleep.wait_30_seconds]
+  depends_on = [time_sleep.wait_in_seconds]
   metadata {
     name = "${local.helm_trim}-${var.SANDBOX_ID}"
     namespace = var.HELM_NAMESPACE

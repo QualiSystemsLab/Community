@@ -32,6 +32,11 @@ variable "HELM_VALUES" {
   default = ""
 }
 
+variable "WAIT_TIME" {
+  type    = string
+  default = "90s"
+}
+
 locals {
   helm_values           = split(";", var.HELM_VALUES)
   helm_config           = tomap({for x in local.helm_values : split(":",x)[0] => split(":",x)[1]})
