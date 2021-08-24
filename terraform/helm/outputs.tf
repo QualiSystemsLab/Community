@@ -24,6 +24,6 @@ output "spec" {
   value = data.kubernetes_service.helm_deploy.spec
 }
 
-output "ingressendpoint" {
+output "Ingress_Endpoint" {
   value = data.kubernetes_ingress.helm_ingress.status[0].load_balancer[0].ingress[0].hostname
 }

@@ -32,9 +32,10 @@ variable "HELM_VALUES" {
   default = ""
 }
 
-variable "WAIT_TIME" {
-  type    = string
-  default = "90s"
+variable "INGRESS_TIMEOUT" {
+  type    = number
+  default = 20
+  description = "Time to wait for ingress in minutes"
 }
 
 locals {

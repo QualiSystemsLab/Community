@@ -25,6 +25,28 @@ resource "local_file" "invoke_sh" {
   )
 }
 
+resource "null_resource" "wait_for_ingress" {
+  depends_on = [local_file.invoke_sh_ingress]
+  provisioner "local-exec" {
+    interpreter = ["/bin/bash"]
+    working_dir = "${path.module}"
+    command     = "./waitforingress.sh"
+  }
+}
+
+resource "local_file" "invoke_sh_ingress" {
+  depends_on = [helm_release.helm_deploy]
+  filename = "${path.module}/waitforingress.sh"
+  content = templatefile(
+    "${path.module}/templates/waitforingress.sh.tpl",
+     {
+        NAMESPACE       = var.HELM_NAMESPACE,
+        INGRESSNAME     = "${local.helm_trim}-${var.SANDBOX_ID}",
+        INGRESS_TIMEOUT = var.INGRESS_TIMEOUT
+     }
+  )
+}
+
 
 
 
@@ -53,14 +75,8 @@ data "kubernetes_service" "helm_deploy" {
   }
 }
 
-resource "time_sleep" "wait_in_seconds" {
-  depends_on = [helm_release.helm_deploy]
-
-  create_duration = var.WAIT_TIME
-}
-
 data "kubernetes_ingress" "helm_ingress" {
-  depends_on = [time_sleep.wait_in_seconds]
+  depends_on = [null_resource.wait_for_ingress]
   metadata {
     name = "${local.helm_trim}-${var.SANDBOX_ID}"
     namespace = var.HELM_NAMESPACE

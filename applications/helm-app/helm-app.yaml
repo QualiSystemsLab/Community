@@ -1,0 +1,27 @@
+spec_version: 1
+kind: application
+
+inputs:
+  - REDIRECT:
+
+source:
+  os_type: linux
+  image:
+    docker_image:
+      - name: ubuntu
+        tag: 16.04
+
+infrastructure:
+  connectivity:
+    external:
+      - port_info:
+          port: 80
+
+configuration:  
+  initialization:
+    script: init.sh
+  start:
+    script: start.sh
+  healthcheck:
+    script: healthcheck.sh
+    timeout: 600
