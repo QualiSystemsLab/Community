@@ -4,8 +4,8 @@ provider "aws" {
 
 # Get VPC by sandbox id
 data "aws_vpc" "sandbox_vpc" {
-    filter = {
-        name = "tag:colony-sandbox-id"
+    filter {
+        name = "tag:torque-sandbox-id"
         values = ["${var.SANDBOX_ID}"]
     }    
 }
@@ -14,7 +14,7 @@ data "aws_vpc" "sandbox_vpc" {
 data "aws_subnet" "sandbox_app_subnet_0" {
     vpc_id = "${data.aws_vpc.sandbox_vpc.id}"
 
-    filter = {
+    filter {
         name = "tag:Name"
         values = ["app-subnet-0"]
     }
@@ -22,7 +22,7 @@ data "aws_subnet" "sandbox_app_subnet_0" {
 data "aws_subnet" "sandbox_app_subnet_1" {
     vpc_id = "${data.aws_vpc.sandbox_vpc.id}"
 
-    filter = {
+    filter {
         name = "tag:Name"
         values = ["app-subnet-1"]
     }
@@ -92,7 +92,6 @@ resource "aws_docdb_cluster" "default" {
     db_subnet_group_name  = "${aws_docdb_subnet_group.default.id}"
     skip_final_snapshot = true
     vpc_security_group_ids = ["${aws_security_group.docdb_sg.id}"]
-    db_cluster_parameter_group_name = "${aws_docdb_cluster_parameter_group.no_tls.id}"
     tags = {
         colony-sandbox-id   = "${var.SANDBOX_ID}"
     }
@@ -102,7 +101,7 @@ resource "null_resource" "insert_data" {
     count = "${var.INSERT_DATA ? 1 : 0}"
 
     provisioner "local-exec" {
-        command = "chmod 777 insert_data.sh && ./insert_data.sh ${aws_docdb_cluster.default.endpoint} ${var.USERNAME} ${var.PASSWORD} ${var.DB_NAME} ${var.COLLECTION_NAME} \"${var.DATA}\" ${aws_docdb_cluster_instance.cluster_instances.arn}"
+        command = "chmod 777 insert_data.sh && ./insert_data.sh ${aws_docdb_cluster.default.endpoint} ${var.USERNAME} ${var.PASSWORD} ${var.DB_NAME} ${var.COLLECTION_NAME} \"${var.DATA}\" ${aws_docdb_cluster_instance.cluster_instances[0].arn}"
         interpreter = ["/bin/bash", "-c"]
     }
 }
