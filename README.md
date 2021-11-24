@@ -3,8 +3,8 @@
 
 ![quali](quali.png)
 
-## Cloudshell Colony Community 
-This repository contains sample blueprints and services for use with Cloudshell Colony. These examples are meant to provide guidance on best practices and allow for new users to immediately have example deployments to experience. 
+## Torque Community 
+This repository contains sample blueprints and services for use with Torque. These examples are meant to provide guidance on best practices and allow for new users to immediately have example deployments to experience. 
 
 ## Contributing
 
