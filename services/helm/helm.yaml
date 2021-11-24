@@ -1,0 +1,39 @@
+spec_version: 1
+kind: TerraForm
+
+inputs:
+  - HELM_REPO:
+  - HELM_CHART:
+  - HELM_NAMESPACE:
+  - HELM_REPO_PASSWORD:
+  - HELM_VALUES:
+  - REGION:
+  - SANDBOX_ID:
+  - BRANCH:
+
+
+
+module:
+  source: git::https://github.com/QualiSystemsLab/Community.git//terraform/helm?ref=${BRANCH}
+  enable_auto_tagging: false
+
+terraform_version: 1.0.3
+
+variables:
+  values: 
+    - SANDBOX_ID: $SANDBOX_ID
+    - aws_region: $REGION
+    - HELM_REPO: $HELM_REPO
+    - HELM_CHART: $HELM_CHART
+    - HELM_NAMESPACE: $HELM_NAMESPACE
+    - HELM_REPO_PASSWORD: $HELM_REPO_PASSWORD
+    - HELM_VALUES: $HELM_VALUES
+
+outputs:
+  - Name_of_the_release
+  - Name_of_the_chart
+  - Namespace
+  - Status_of_the_release
+  - Version_of_the_chart
+  - Values
+  - Ingress_Endpoint

@@ -1,0 +1,29 @@
+# Default values for chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+image:
+  repository: nginx
+  tag: 1.14.2
+  pullPolicy: IfNotPresent
+  
+service:
+  name: hello-service
+  type: NodePort
+  externalPort: 80
+  internalPort: 80
+ingress:
+  enabled: true
+  annotations:
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      kubernetes.io/ingress.class: alb
+      alb.ingress.kubernetes.io/target-type: ip
+  tls:
+resources: {}
+
+app:
+  name:
+  env: "qa"
+  applicationGenericSecrets: []
+  applicationProperties: 
+  secretName: secretname

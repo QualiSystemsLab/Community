@@ -1,0 +1,14 @@
+{{- if .Values.app.applicationProperties }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}-app-configmap
+  namespace: {{ .Values.namespace }}
+  labels:
+    env: {{ .Values.app.env }}
+    appName: {{ .Values.app.name }}
+data:
+{{- range $key, $value := default dict .Values.app.applicationProperties }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}
+{{- end -}}

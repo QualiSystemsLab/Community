@@ -1,0 +1,55 @@
+spec_version: 1
+kind: blueprint
+
+metadata:
+  description: > 
+    Helm example on EKS.
+    
+clouds: 
+  - AWSOther/eks
+  
+artifacts:
+
+
+inputs:
+  - HELM_REPO: 
+      description: "Github repo hosting the Helm Charts"
+      default_value: "https://github.com/QualiSystemsLab/Community"
+  - HELM_REPO_PASSWORD: 
+      description: "Repo password, not required if public repo"
+      display_style: masked
+      default_value: 
+      optional: true
+  - HELM_CHART:
+      description: "Name of the helm chart. Must be under root charts folder, then path can be specified i.e. demo/chartname"
+      default_value: "demo/hello"
+  - HELM_NAMESPACE:
+      description: "Cluster Namespace to deploy chart into"
+      default_value: 
+  - HELM_VALUES:
+      description: "List of semi-colon separated values that must be separated by colons i.e app.env:test;app.name:somename if the key should not be separated by dots ingress.annotations.alb\\\\.ingress\\\\.kubernetes\\\\.io/scheme:internal"
+      optional: true
+      #if using something that should not be separated by dots use this example ingress.annotations.alb\\\\.ingress\\\\.kubernetes\\\\.io/scheme:internal"
+      default_value: "app.env:test2;app.secretName:nothing;app.name:bobber;app.applicationProperties.value1:hello;app.applicationProperties.value2:bye"
+
+applications:
+  - helm-app:
+      input_values:
+        - REDIRECT: $colony.services.helm.outputs.Ingress_Endpoint
+      depends_on:
+        - helm
+
+services:
+  - helm:
+      input_values:
+        - SANDBOX_ID: $colony.environment.id
+        - REGION: us-east-1
+        - BRANCH: $colony.repos.current.branch 
+        - HELM_REPO: $HELM_REPO
+        - HELM_CHART: $HELM_CHART
+        - HELM_NAMESPACE: $HELM_NAMESPACE
+        - HELM_REPO_PASSWORD: $HELM_REPO_PASSWORD
+        - HELM_VALUES: $HELM_VALUES
+
+debugging:
+  availability: disabled
