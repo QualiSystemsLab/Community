@@ -6,11 +6,12 @@ PASSWORD="$3"
 DB="$4"
 COLLECTION="$5"
 DATA="$6"
+OS=`cat /etc/os-release`
 
 # install mongoimport cli tool
 echo 'Install MongoDB'
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
-curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
+curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc |  apt-key add -
 echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" |  tee /etc/apt/sources.list.d/mongodb-org-4.4.list
 apt-get update -y
 apt-get install -y mongodb-org
@@ -27,6 +28,8 @@ echo "Password: ****"
 echo "DB Name: $DB"
 echo "Collection Name: $COLLECTION"
 echo "Data: $DATA"
+
+echo $OS
 
 # wait until cluster endpoint is listining
 apt-get install netcat -y
