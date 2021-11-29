@@ -28,6 +28,8 @@ echo "DB Name: $DB"
 echo "Collection Name: $COLLECTION"
 echo "Data: $DATA"
 
+echo ${cat /etc/os-release}
+
 # wait until cluster endpoint is listining
 apt-get install netcat -y
 timeout=600
