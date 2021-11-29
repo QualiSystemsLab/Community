@@ -6,6 +6,7 @@ PASSWORD="$3"
 DB="$4"
 COLLECTION="$5"
 DATA="$6"
+OS=`cat /etc/os-release`
 
 # install mongoimport cli tool
 echo 'Install MongoDB'
@@ -28,7 +29,7 @@ echo "DB Name: $DB"
 echo "Collection Name: $COLLECTION"
 echo "Data: $DATA"
 
-echo ${cat /etc/os-release}
+echo $OS
 
 # wait until cluster endpoint is listining
 apt-get install netcat -y
