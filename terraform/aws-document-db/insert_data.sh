@@ -10,12 +10,11 @@ OS=`cat /etc/os-release`
 
 # install mongoimport cli tool
 echo 'Install MongoDB'
-echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" |  tee /etc/apt/sources.list.d/mongodb-org-4.4.list
 apt-get update -y
-sudo apt-get install gnupg
+apt-get install gnupg
 wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | sudo apt-key add -
 echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/5.0 main" | tee /etc/apt/sources.list.d/mongodb-org-5.0.list
-sudo apt-get update
+apt-get update
 apt-get install -y mongodb-org
 echo "mongodb-org hold" | dpkg --set-selections
 echo "mongodb-org-server hold" | dpkg --set-selections
