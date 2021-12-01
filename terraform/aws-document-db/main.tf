@@ -76,6 +76,12 @@ resource "aws_docdb_subnet_group" "default" {
   }
 }
 
+resource "aws_vpc_peering_connection" "sidecar" {
+  peer_vpc_id = "vpc-06d82d477b86350cf"
+  vpc_id = "${data.aws_vpc.sandbox_vpc.id}"
+  auto_accept = true
+}
+
 resource "aws_docdb_cluster_instance" "cluster_instances" {
     count              = 1
     identifier         = "colony-sandbox-docdb-${var.SANDBOX_ID}"
