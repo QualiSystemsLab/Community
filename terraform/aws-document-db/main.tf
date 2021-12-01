@@ -76,12 +76,6 @@ resource "aws_docdb_subnet_group" "default" {
   }
 }
 
-resource "aws_vpc_peering_connection" "sidecar" {
-  peer_vpc_id = "vpc-06d82d477b86350cf"
-  vpc_id = "${data.aws_vpc.sandbox_vpc.id}"
-  auto_accept = true
-}
-
 resource "aws_docdb_cluster_instance" "cluster_instances" {
     count              = 1
     identifier         = "colony-sandbox-docdb-${var.SANDBOX_ID}"
@@ -115,4 +109,16 @@ resource "null_resource" "insert_data" {
 
 output "connection_string" {
     value = "mongodb://${var.USERNAME}:${var.PASSWORD}@${aws_docdb_cluster.default.endpoint}:27017"
+}
+
+output "endpoint" {
+  value = "${aws_docdb_cluster.default.endpoint}"
+}
+
+output "cluster_arn" {
+  value = "${aws_docdb_cluster_instance.cluster_instances[0].arn}"
+}
+
+output "collection_name" {
+  value = "${var.COLLECTION_NAME}"
 }
