@@ -38,7 +38,8 @@ resource "aws_security_group" "docdb_sg" {
     from_port   = 27017
     to_port     = 27017
     protocol    = "tcp"
-    cidr_blocks = ["${data.aws_vpc.sandbox_vpc.cidr_block}"]
+    #cidr_blocks = ["${data.aws_vpc.sandbox_vpc.cidr_block}"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -73,6 +74,12 @@ resource "aws_docdb_subnet_group" "default" {
     Name = "colony document db sugnet group"
     colony-sandbox-id = "${var.SANDBOX_ID}"
   }
+}
+
+resource "aws_vpc_peering_connection" "sidecar" {
+  peer_vpc_id = "vpc-06d82d477b86350cf"
+  vpc_id = "${data.aws_vpc.sandbox_vpc.id}"
+  auto_accept = true
 }
 
 resource "aws_docdb_cluster_instance" "cluster_instances" {
