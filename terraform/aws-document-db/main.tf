@@ -98,14 +98,14 @@ resource "aws_docdb_cluster" "default" {
     }
 }
 
-resource "null_resource" "insert_data" {
-    count = "${var.INSERT_DATA ? 1 : 0}"
-
-    provisioner "local-exec" {
-        command = "chmod 777 insert_data.sh && ./insert_data.sh ${aws_docdb_cluster.default.endpoint} ${var.USERNAME} ${var.PASSWORD} ${var.DB_NAME} ${var.COLLECTION_NAME} \"${var.DATA}\" ${aws_docdb_cluster_instance.cluster_instances[0].arn}"
-        interpreter = ["/bin/bash", "-c"]
-    }
-}
+#resource "null_resource" "insert_data" {
+#    count = "${var.INSERT_DATA ? 1 : 0}"
+#
+#    provisioner "local-exec" {
+#        command = "chmod 777 insert_data.sh && ./insert_data.sh ${aws_docdb_cluster.default.endpoint} ${var.USERNAME} ${var.PASSWORD} ${var.DB_NAME} ${var.COLLECTION_NAME} \"${var.DATA}\" ${aws_docdb_cluster_instance.cluster_instances[0].arn}"
+#        interpreter = ["/bin/bash", "-c"]
+#    }
+#}
 
 output "connection_string" {
     value = "mongodb://${var.USERNAME}:${var.PASSWORD}@${aws_docdb_cluster.default.endpoint}:27017"
